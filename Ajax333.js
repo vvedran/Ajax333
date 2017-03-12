@@ -1,11 +1,10 @@
 var Ajax333 = {};
 
 Ajax333.createXHR = function(url, options){
+	
 	var xml = false;
-
-
-	//provjerava da li browser podrzava xhr objekat 
-	// i podrska za starije IE
+	
+	// supprot for older browsers
 	if(window.XMLHttpRequest){
 		xhr = new XMLHttpRequest();
 	}else if(window.ActiveXObject){
@@ -23,7 +22,7 @@ Ajax333.createXHR = function(url, options){
 		options.data = options.data || null;
 
 
-		/*parsirsnje podataka za slanje serveru POST "key=value&key2=value2" */
+		/*parse data for sending with POST tehod "key=value&key2=value2" */
 		if (options.data) {
 			var qstring = [];
 
@@ -34,13 +33,13 @@ Ajax333.createXHR = function(url, options){
 			options.data = qstring.join("&");
 		}
 
-		/*   opcija za isklucivanje kesiranja  */
+		/*  preventing caching on GET request   */
 		if(options.cache == false && options.method.toUpperCase() == "GET"){
 			url=url+"?_="+ new Date().getTime();
 		}
 
 		xhr.onreadystatechange = function(){
-			/* opcija before omogucava prikaz ocitavanja  */
+			/* options.before allow to display loading   */
 			if (xhr.readyState == 1) {
 				if (options.before) {
 					options.before.call(xhr);
@@ -52,7 +51,6 @@ Ajax333.createXHR = function(url, options){
 
 				if(options.complete){
 					if(contentType == "application/json") {
-							// >>>stim da moramo da ubacimo skript za parsiranje JSON fajla<<<
 							options.complete.call(xhr, JSON.parse(xhr.responseText));	
 
 					}else if(contentType == "text/xml"  || contentType == "application/xml"){
